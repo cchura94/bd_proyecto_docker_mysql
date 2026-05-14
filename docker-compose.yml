@@ -1,0 +1,39 @@
+services:
+  bd_mysql_proyecto:
+    container_name: bd_mysql_proyecto
+    image: mysql:9.5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bd_base
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql.sql:/docker-entrypoint-initdb.d/mysql.sql
+  
+  bd_phpmyadmin_proy:
+    container_name: bd_phpmyadmin_proy
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    depends_on:
+      - bd_mysql_proyecto
+    ports:
+      - "8889:80"
+    environment:
+      PMA_HOST: bd_mysql_proyecto
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+
+
+  # cloudbeaver:
+  #   image: dbeaver/cloudbeaver:latest
+  #   container_name: cloudbeaver
+  #   ports:
+  #     - "8978:8978"
+  #   restart: always
+
+volumes:
+  mysql_data:
