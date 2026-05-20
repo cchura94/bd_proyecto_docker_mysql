@@ -2,12 +2,25 @@ CREATE DATABASE bd_compras_ventas_inventario;
 
 USE bd_compras_ventas_inventario;
 
+CREATE TABLE personas(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombres VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE,
+    genero VARCHAR(20),
+    direccion TEXT,
+    telefono VARCHAR(20),
+    nacionalidad VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE users(
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    status BOOLEAN
+    status BOOLEAN,
+    persona_id INT,
+    FOREIGN KEY(persona_id) REFERENCES personas(id)
 );
 
 CREATE TABLE roles(
@@ -39,16 +52,7 @@ CREATE TABLE role_user(
     FOREIGN KEY(role_id) REFERENCES roles(id)
 );
 
-CREATE TABLE personas(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombres VARCHAR(100) NOT NULL,
-    apellidos VARCHAR(100) NOT NULL,
-    fecha_nacimiento DATE,
-    genero VARCHAR(20),
-    direccion TEXT,
-    telefono VARCHAR(20),
-    nacionalidad VARCHAR(50) NOT NULL
-);
+
 
 CREATE TABLE documentos(
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,13 +66,20 @@ CREATE TABLE documentos(
 
 CREATE TABLE sucursales(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    archivo VARCHAR(255) NOT NULL,
-    detalle TEXT,
-    estado BOOLEAN,
-    persona_id INT NOT NULL,
-    FOREIGN KEY (persona_id) REFERENCES personas(id)
+    nombre VARCHAR(100) NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    ciudad VARCHAR(100) NOT NULL
 );
+
+CREATE TABLE sucursal_user(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sucursal_id INT NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (sucursal_id) REFERENCES sucursales(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 
 CREATE TABLE almacenes(
     id INT AUTO_INCREMENT PRIMARY KEY,
